@@ -9,12 +9,12 @@ func TestMain(t *testing.T) {
 
 }
 
-func TestMap(t *testing.T) {
+func TestGenericMap(t *testing.T) {
 	// Test one - test if numbers will be multiplied by 4
 	list1 := []int{1, 2, 3, 4}
 	checkList1 := []int{4, 8, 12, 16}
 	ano1 := Wrap(list1)
-	helper1 := ano1.Map(func(element int) interface{} {
+	helper1 := ano1.GenericMap(func(element int) interface{} {
 		return element * 4
 	})
 	ano1, _ = DefineType[int](helper1)
@@ -28,7 +28,7 @@ func TestMap(t *testing.T) {
 	list2 := []int{1, 2, 3, 4}
 	checkList2 := []string{"1.", "2.", "3.", "4."}
 	ano2 := Wrap(list2)
-	helper2 := ano2.Map(func(element int) interface{} {
+	helper2 := ano2.GenericMap(func(element int) interface{} {
 		return fmt.Sprintf("%d.", element)
 	})
 	ano3, _ := DefineType[string](helper2)
@@ -42,7 +42,7 @@ func TestMap(t *testing.T) {
 
 	list3 := []int{1, 2, 3, 4}
 	ano4 := Wrap(list3)
-	helper3 := ano4.Map(func(element int) interface{} {
+	helper3 := ano4.GenericMap(func(element int) interface{} {
 		return element * 2
 	})
 	_, err := DefineType[string](helper3)

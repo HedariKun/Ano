@@ -33,7 +33,7 @@ func (ano Ano[T]) Get() []T {
 	return ano.list
 }
 
-func (ano Ano[T]) Map(mapFunc func(element T) interface{}) anoHelper {
+func (ano Ano[T]) GenericMap(mapFunc func(element T) interface{}) anoHelper {
 	list := []any{}
 	for _, element := range ano.list {
 		item := mapFunc(element)
