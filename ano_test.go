@@ -5,8 +5,15 @@ import (
 	"testing"
 )
 
-func TestMain(t *testing.T) {
-
+func TestMap(t *testing.T) {
+	list := []int{1, 2, 3, 4}
+	checkList := []int{2, 4, 6, 8}
+	ano := Wrap(list).Map(func(element int) int { return element * 2 })
+	for index, element := range ano.Get() {
+		if element != checkList[index] {
+			t.Fatalf("Map not working: Expected %d but got %d", checkList[index], element)
+		}
+	}
 }
 
 func TestGenericMap(t *testing.T) {
