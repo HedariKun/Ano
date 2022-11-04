@@ -63,3 +63,18 @@ func (ano Ano[T]) Filter(filterFunc func(element T) bool) Ano[T] {
 	newAno.list = list
 	return newAno
 }
+
+func (ano Ano[T]) Sort(sortFunc func(A, B T) bool) Ano[T] {
+	newAno := Ano[T]{}
+	var mainNode *node[T]
+	for _, element := range ano.Get() {
+		if mainNode == nil {
+			mainNode = &node[T]{value: element}
+		} else {
+			mainNode.Add(element, sortFunc)
+		}
+	}
+
+	newAno.list = mainNode.GetList()
+	return newAno
+}

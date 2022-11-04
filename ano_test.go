@@ -5,6 +5,23 @@ import (
 	"testing"
 )
 
+type user struct {
+	Name     string
+	canDrive bool
+}
+
+func TestM(t *testing.T) {
+	u1 := user{Name: "mike", canDrive: true}
+	u2 := user{Name: "jessica", canDrive: false}
+	u3 := user{Name: "atrox", canDrive: true}
+	u4 := user{Name: "rawa", canDrive: false}
+
+	list := []user{u1, u2, u3, u4}
+	ano := Wrap(list)
+	ano = ano.Filter(func(e user) bool { return !e.canDrive }).Sort(func(a, b user) bool { return a.Name < b.Name })
+	fmt.Printf("%+v", ano.Get())
+}
+
 func TestMap(t *testing.T) {
 	list := []int{1, 2, 3, 4}
 	checkList := []int{2, 4, 6, 8}
@@ -70,5 +87,40 @@ func TestFilter(t *testing.T) {
 	}
 	if len(ano.Get()) != len(checkList) {
 		t.Fatal("Filter not working: the filtered list doesn't match the expected list")
+	}
+}
+
+func TestSort(t *testing.T) {
+	defer func() {
+		if err := recover(); err != nil {
+			t.Fatalf("Sort not working: %v", err)
+		}
+	}()
+
+	// sort runes alphabatically
+	list1 := []int{5, 7, 12, 4, 3, 6, 8, 9, 1, 0, 10, 11, 2}
+	sortedList1 := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+	ano1 := Wrap(list1)
+	ano1 = ano1.Sort(func(A, B int) bool {
+		return A < B
+	})
+	anoList1 := ano1.Get()
+	for index, element := range sortedList1 {
+		if element != anoList1[index] {
+			t.Fatalf("Sort not working: expected %d got %d", element, anoList1[index])
+		}
+	}
+
+	list2 := []rune{'a', 'c', 'd', 'p', 'b', 'e', 'i', 'g', 'h', 'f', 'j', 'x', 'y', 'z', 'l', 'k', 'o', 'q', 'm', 'n', 'r', 'w', 'u', 's', 't', 'v'}
+	sortedList2 := []rune{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}
+	ano2 := Wrap(list2)
+	ano2 = ano2.Sort(func(A, B rune) bool {
+		return A < B
+	})
+	anoList2 := ano2.Get()
+	for index, element := range sortedList2 {
+		if element != anoList2[index] {
+			t.Fatalf("Sort not working: expected %v got %v", string(element), string(anoList2[index]))
+		}
 	}
 }
