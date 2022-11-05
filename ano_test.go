@@ -124,3 +124,49 @@ func TestSort(t *testing.T) {
 		}
 	}
 }
+
+func TestIntersect(t *testing.T) {
+	listA := []int{1, 2, 3, -123, 4, 5, 54234}
+	listB := []int{7, 5, 54234, -123, 8, 4, 9}
+	checkList := []int{-123, 4, 5, 54234}
+	anoList := Wrap(listA).Intersect(listB, func(element int) any { return element }).Sort(func(a, b int) bool { return a < b }).Get()
+	if len(checkList) != len(anoList) {
+		t.Fatalf("Intersect not working: expected size of %v but got %v", len(checkList), len(anoList))
+	}
+	for index, element := range checkList {
+		if anoList[index] != element {
+			t.Fatalf("Intersect not working: expected %v but got %v", element, anoList[index])
+		}
+	}
+}
+
+func TestIntersectWithStruct(t *testing.T) {
+	type User struct {
+		id   int
+		name string
+	}
+	user1 := User{id: 1, name: "kevin"}
+	user2 := User{id: 2, name: "sarah"}
+	user3 := User{id: 3, name: "paul"}
+	user4 := User{id: 4, name: "mike"}
+	user5 := User{id: 5, name: "rawa"}
+	user6 := User{id: 6, name: "ali"}
+	user7 := User{id: 7, name: "user"}
+	user8 := User{id: 8, name: "mike"}
+
+	teamA := []User{user1, user4, user7, user3, user6}
+	teamB := []User{user7, user8, user1, user2, user5, user3}
+
+	checkTeam := []User{user1, user3, user7}
+
+	intersectUsers := Wrap(teamA).Intersect(teamB, func(element User) any { return element.id }).Sort(func(A, B User) bool { return A.id < B.id }).Get()
+	if len(checkTeam) != len(intersectUsers) {
+		t.Fatalf("Intersection not working: expected length %v got %v", len(checkTeam), len(intersectUsers))
+	}
+	for index, element := range checkTeam {
+		if intersectUsers[index].id != element.id {
+			t.Fatalf("Intersection not working: expected element %v got %v", element, intersectUsers[index])
+		}
+	}
+
+}

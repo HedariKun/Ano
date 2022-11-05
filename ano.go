@@ -78,3 +78,29 @@ func (ano Ano[T]) Sort(sortFunc func(A, B T) bool) Ano[T] {
 	newAno.list = mainNode.GetList()
 	return newAno
 }
+
+func (ano Ano[T]) Intersect(otherList []T, intersectFunc func(element T) any) Ano[T] {
+
+	objectsMap := make(map[any]bool)
+	intersectedList := []T{}
+
+	for _, element := range otherList {
+		key := intersectFunc(element)
+		_, ok := objectsMap[key]
+		if !ok {
+			objectsMap[key] = false
+		}
+	}
+
+	for _, element := range ano.list {
+		key := intersectFunc(element)
+		_, ok := objectsMap[key]
+		if ok {
+			intersectedList = append(intersectedList, element)
+		}
+	}
+
+	return Wrap(intersectedList)
+}
+
+// Todo: add strict intersect for structs to make sure that the data should be the same
