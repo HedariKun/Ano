@@ -170,3 +170,20 @@ func TestIntersectWithStruct(t *testing.T) {
 	}
 
 }
+
+func TestUnion(t *testing.T) {
+	listA := []int{1, 2, 3, 4, 5, 6}
+	listB := []int{4, 5, 6, 7, 8, 9}
+	checkList := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
+
+	unionList := Wrap(listA).Union(listB, func(element int) any { return element }).Get()
+
+	if len(unionList) != len(checkList) {
+		t.Fatalf("Union not working: expected length of %v but got %v", len(checkList), len(unionList))
+	}
+	for index, element := range checkList {
+		if element != unionList[index] {
+			t.Fatalf("Union not working: expected %v but got %v", element, unionList[index])
+		}
+	}
+}

@@ -104,3 +104,29 @@ func (ano Ano[T]) Intersect(otherList []T, intersectFunc func(element T) any) An
 }
 
 // Todo: add strict intersect for structs to make sure that the data should be the same
+
+func (ano Ano[T]) Union(otherList []T, unionFunc func(element T) any) Ano[T] {
+	list := []T{}
+	elementMap := make(map[any]bool)
+
+	for _, element := range ano.Get() {
+		list = append(list, element)
+		key := unionFunc(element)
+
+		_, ok := elementMap[key]
+		if !ok {
+			elementMap[key] = false
+		}
+	}
+
+	for _, element := range otherList {
+		key := unionFunc(element)
+
+		_, ok := elementMap[key]
+		if !ok {
+			list = append(list, element)
+		}
+	}
+
+	return Wrap(list)
+}
